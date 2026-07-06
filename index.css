@@ -1,11 +1,90 @@
-/* Perbaikan posisi Kertas Surat di HP agar lebih turun */
-.container.open .letter-paper { 
-    width: 90vw; 
-    height: 70vh; /* Sedikit dikurangi dari 75vh agar tidak terlalu tinggi */
-    position: absolute;
-    top: 55%; /* Diubah dari 50% ke 55% agar posisinya lebih turun ke bawah */
-    left: 50%;
-    bottom: auto;
-    transform: translate(-50%, -50%); 
-    z-index: 15;
-}
+/* ==========================================================================
+           --- OPTIMASI SUPER RESPONSIF HP & TABLET (BREAKPOINT < 768px) ---
+           ========================================================================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px !important;
+                height: 100vh !important;
+                overflow: hidden !important;
+            }
+            
+            .container { 
+                height: 100vh !important; 
+                padding: 10px !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+
+            .envelope-wrapper { 
+                width: 85vw !important; 
+                height: 55vw !important; 
+                border-radius: 0 0 12px 12px !important; 
+            }
+
+            .envelope-flap { 
+                border-left: 42.5vw solid transparent !important; 
+                border-right: 42.5vw solid transparent !important; 
+                border-top: 30vw solid #cfc0ad !important; 
+            }
+
+            .envelope-pockets { 
+                width: 85vw !important; 
+                height: 55vw !important; 
+                border-radius: 0 0 12px 12px !important; 
+            }
+
+            .wax-seal { 
+                top: calc(27.5vw - 25px) !important; 
+                left: calc(42.5vw - 25px) !important; 
+                width: 50px !important; 
+                height: 50px !important; 
+                font-size: 1.1rem !important; 
+            }
+            
+            .container.open .envelope-wrapper { 
+                transform: translateY(45vh) scale(0.4) !important; 
+                opacity: 0 !important; 
+                pointer-events: none !important;
+            }
+
+            /* --- PAKSA SURAT TURUN DI SINI --- */
+            .container.open .letter-paper { 
+                width: 90vw !important; 
+                height: 72vh !important; /* Batasi tinggi surat agar ruang bawahnya lega */
+                position: fixed !important; /* Mengunci posisi berdasarkan layar HP */
+                top: 0 !important;
+                left: 50% !important;
+                bottom: auto !important;
+                transform: translateX(-50%) !important; /* Hanya geser kiri-kanan */
+                margin-top: 12vh !important; /* Jarak murni dari atas layar, ini yang bikin surat turun */
+                z-index: 999 !important;
+            }
+
+            .letter-scroll-box { 
+                padding: 30px 20px !important; 
+            }
+
+            .letter-title { 
+                font-size: 1.25rem !important; 
+                margin-bottom: 15px !important; 
+            }
+
+            .letter-text { 
+                font-size: 1.05rem !important; 
+                line-height: 1.9 !important; 
+                text-align: left !important; 
+            }
+
+            .letter-footer { 
+                font-size: 0.95rem !important; 
+                margin-top: 20px !important; 
+            }
+            
+            .instruction-hint {
+                font-size: 0.8rem !important;
+                letter-spacing: 1px !important;
+                position: absolute !important;
+                bottom: 40px !important; 
+            }
+        }
