@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twenty-One.</title>
+    <style>
+        /* --- CORE STYLES & BACKGROUND --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5efe6, #e8dfd8);
+            font-family: 'Georgia', serif;
+            color: #4a4a4a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            perspective: 2000px;
+        }
+
+        /* --- ANIMASI MERIAH: ELEMEN BALON --- */
+        .balloon {
+            position: absolute;
+            width: 35px;
+            height: 45px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 9;
+        }
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 16px;
+            width: 0;
+            height: 0;
+            border-left: 2px solid transparent;
+            border-right: 2px solid transparent;
+            border-bottom: 8px solid currentColor;
+        }
+
+        /* --- ANIMASI: KEMBANG API LEBIH BESAR & LAMA --- */
+        .firework-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 12;
+        }
+
+        /* --- CONTAINER UTAMA --- */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 900px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* --- STRUKTUR AMPLOP SUPER JUMBO --- */
+        .envelope-wrapper {
+            position: relative;
+            width: 1000px;
+            height: 650px;
+            background-color: #dfd3c3;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 35px 80px rgba(110, 97, 86, 0.25);
+            cursor: pointer;
+            z-index: 3;
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 500px solid transparent;
+            border-right: 500px solid transparent;
+            border-top: 350px solid #cfc0ad;
+            transform-origin: top;
+            transition: transform 0.6s ease 0.1s, z-index 0.2s ease 0.3s;
+            z-index: 5;
+        }
+
+        .envelope-pockets {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 1000px;
+            height: 650px;
+            background: linear-gradient(33deg, #d5c7b5 50%, transparent 50%),
+                        linear-gradient(-33deg, #d5c7b5 50%, transparent 50%);
+            border-radius: 0 0 20px 20px;
+            z-index: 4;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 310px;
+            left: 460px;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #b8860b, #8b6508);
+            border-radius: 50%;
+            z-index: 6;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f5efe6;
+            font-size: 1.7rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            transition: all 0.4s ease;
+        }
+
+        /* --- KERTAS SURAT JUMBO --- */
+        .letter-paper {
+            position: absolute;
+            bottom: 60px;
+            width: 920px;
+            height: 560px;
+            background-color: #faf8f5;
+            background-image: linear-gradient(#e8dfd8 1px, transparent 1px);
+            background-size: 100% 3em;
+            box-sizing: border-box;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.05);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 2;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .letter-scroll-box {
+            width: 100%;
+            height: 100%;
+            padding: 60px 55px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .letter-title {
+            font-size: 1.9rem;
+            color: #6e6156;
+            margin-bottom: 35px;
+            font-weight: normal;
+            text-align: center;
+            letter-spacing: 1.5px;
+            flex-shrink: 0;
+        }
+
+        .letter-text {
+            font-size: 1.4rem;
+            line-height: 2.3;
+            text-align: justify;
+            color: #333;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .letter-footer {
+            display: block;
+            text-align: center;
+            font-style: italic;
+            margin-top: 45px;
+            color: #6e6156;
+            font-size: 1.3rem;
+        }
+
+        .letter-scroll-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .letter-scroll-box::-webkit-scrollbar-thumb {
+            background-color: #cfc0ad;
+            border-radius: 10px;
+        }
+
+        /* --- KONDISI AMPLOP DIBUKA --- */
+        .container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .container.open .wax-seal {
+            opacity: 0;
+            transform: scale(0.3);
+            pointer-events: none;
+        }
+
+        .container.open .envelope-wrapper {
+            transform: translateY(340px) scale(0.65);
+            opacity: 0.12;
+        }
+
+        .container.open .letter-paper {
+            bottom: 20px;
+            width: 100%;
+            height: 820px;
+            z-index: 5;
+            opacity: 1;
+            box-shadow: 0 45px 90px rgba(110, 97, 86, 0.3);
+        }
+
+        .container.open .letter-text {
+            opacity: 1;
+            transition-delay: 0.5s;
+        }
+
+        /* Petunjuk Instruksi Bawah */
+        .instruction-hint {
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: #9c8e82;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 6;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Menghilangkan tulisan petunjuk saat surat terbuka */
+        .container.open .instruction-hint {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- KEYFRAMES ANIMASI LEDAKAN KEMBANG API --- */
+        @keyframes fireworkExplode {
+            0% { transform: translate(0, 0) scale(1.2); opacity: 1; }
+            80% { opacity: 0.8; }
+            100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; }
+        }
+
+        /* --- KEYFRAMES BALON --- */
+        @keyframes balloonFloat {
+            0% { transform: translateY(800px) scale(0.5); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-150px) scale(1.2); opacity: 0; }
+        }
+
+        /* --- OPTIMASI RESPONSIF HP --- */
+        @media (max-width: 768px) {
+            .container { max-width: 100%; height: auto; }
+            .envelope-wrapper { width: 340px; height: 220px; border-radius: 0 0 12px 12px; }
+            .envelope-flap { border-left: 170px solid transparent; border-right: 170px solid transparent; border-top: 125px solid #cfc0ad; }
+            .envelope-pockets { width: 340px; height: 220px; border-radius: 0 0 12px 12px; }
+            .wax-seal { top: 95px; left: 147px; width: 45px; height: 45px; font-size: 0.95rem; }
+            
+            .container.open .envelope-wrapper { transform: translateY(300px) scale(0.7); }
+            .container.open .letter-paper { width: 95%; height: 580px; bottom: 50px; }
+            .letter-scroll-box { padding: 40px 25px; }
+            .letter-text { font-size: 1.05rem; line-height: 2; }
+            .letter-title { font-size: 1.3rem; margin-bottom: 20px; }
+            .letter-footer { font-size: 1rem; margin-top: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="birthdayMusic" loop>
+        <source src="jamrud.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="container" id="cardContainer">
+        <div class="envelope-wrapper" onclick="toggleMail()">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pockets"></div>
+            <div class="wax-seal">21</div>
+        </div>
+
+        <div class="letter-paper">
+            <div class="letter-scroll-box">
+                <h3 class="letter-title">Hai BOCILLL hehehe</h3>
+                <div class="letter-text">
+                    Selamat Ulang tahun yang ke-21 Ya Cantik.<br><br>
+                    "Selamat ulang tahun yaaa. Semoga seluruh cita-cita dan doamu lekas tercapai, dan semua yang kamu mau bisa kamu dapatkan. Semangat terus kedepannya, sehat-sehat terus, dan tolong kurang-kurangi begadang sama overthinking-nya... pod-nya juga dikurangi ya.
+
+Maaf ya kalau aku suka bikin kamu badmood atau suka ngasih larangan-larangan. Aku cuma nggak mau kamu kenapa-kenapa, karena jujur, kamu punya peran yang terlalu penting dalam hidupku. So please take care of yourself, and aku selalu di sini buat kamu, no matter what happens."
+                    <span class="letter-footer">
+                       Makasih kamu udah mau temenan sama aku sampai di titik ini, aku beruntung bisa kenal sama kamu. Jangan pernah merasa sendiri ya, karena kamu selalu punya aku. Happy birthday, BOCILLLLLL!!!!!!! 🧸🤍
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="instruction-hint" id="hintText">Ketuk amplop untuk membaca</div>
+    </div>
+
+    <script>
+        function toggleMail() {
+            const container = document.getElementById('cardContainer');
+            const music = document.getElementById('birthdayMusic');
+            
+            container.classList.toggle('open');
+            
+            if (container.classList.contains('open')) {
+                music.muted = false; 
+                music.currentTime = 0; 
+                
+                let playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        console.log("Audio sukses diputar!");
+                    }).catch(error => {
+                        console.log("Browser menahan suara, pancing ulang...", error);
+                        document.body.addEventListener('click', () => {
+                            music.play();
+                        }, { once: true });
+                    });
+                }
+
+                // Jalankan pesta selebrasi berdurasi panjang
+                triggerCelebration();
+            } else {
+                music.pause();
+            }
+        }
+
+        function triggerCelebration() {
+            // --- 1. ANIMASI: KEMBANG API YANG JAUH LEBIH BANYAK DAN LEBAT ---
+            const colors = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#eccc68', '#ff6b81', '#70a1ff', '#ffffff', '#ff9f43', '#00d2d3'];
+            const totalExplosions = 50;// Dinaikkan menjadi 25 ledakan bersahutan tanpa henti
+            
+            for (let f = 0; f < totalExplosions; f++) {
+                // Jeda diatur agak rapat (f * 250ms) agar ledakannya bertubi-tubi ramai
+                setTimeout(() => {
+                    const originX = window.innerWidth * (0.1 + Math.random() * 0.8);
+                    const originY = window.innerHeight * (0.1 + Math.random() * 0.45);
+                    
+                    for (let i = 0; i < 100; i++) { // Dinaikkan jadi 100 partikel per satu ledakan kembang api
+                        const particle = document.createElement('div');
+                        particle.classList.add('firework-particle');
+                        
+                        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        particle.style.boxShadow = `0 0 8px ${particle.style.backgroundColor}, 0 0 16px ${particle.style.backgroundColor}`;
+                        
+                        particle.style.left = `${originX}px`;
+                        particle.style.top = `${originY}px`;
+                        
+                        const angle = Math.random() * Math.PI * 2;
+                        const velocity = Math.random() * 250 + 80; // Dorongan ledakan dibuat lebih lebar menjangkau layar
+                        const moveX = Math.cos(angle) * velocity;
+                        const moveY = Math.sin(angle) * velocity;
+                        
+                        particle.style.setProperty('--mx', `${moveX}px`);
+                        particle.style.setProperty('--my', `${moveY}px`);
+                        
+                        particle.style.animation = `fireworkExplode ${Math.random() * 0.8 + 2.0}s cubic-bezier(0.1, 0.8, 0.25, 1) forwards`;
+                        
+                        document.body.appendChild(particle);
+                        setTimeout(() => particle.remove(), 3200);
+                    }
+                }, f * 250); 
+            }
+
+            // --- 2. ANIMASI: BALON YANG JAUH LEBIH RAMAI ---
+            const balloonColors = ['rgba(244,162,97,0.75)', 'rgba(231,111,81,0.75)', 'rgba(42,157,143,0.75)', 'rgba(233,196,106,0.75)', 'rgba(184,134,11,0.6)'];
+            const totalBalloons = 75; // Dinaikkan menjadi 75 balon berhamburan terbang dari bawah
+
+            for (let i = 0; i < totalBalloons; i++) {
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                
+                const randomColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+                balloon.style.color = randomColor;
+                balloon.style.backgroundColor = randomColor;
+                
+                balloon.style.left = `${Math.random() * (window.innerWidth - 90)}px`;
+                
+                balloon.style.animation = `balloonFloat ${Math.random() * 2.0 + 4.5}s linear forwards`;
+                balloon.style.animationDelay = `${Math.random() * 2.5}s`; // Jeda sebaran balon merata sampai detik ke-5
+                
+                document.body.appendChild(balloon);
+                setTimeout(() => balloon.remove(),9500);
+            }
+        }
+    </script>
+
+</body>
+</html>
