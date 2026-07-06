@@ -51,7 +51,7 @@
             /* --- PAKSA SURAT TURUN DI SINI --- */
             .container.open .letter-paper { 
                 width: 90vw !important; 
-                height: 72vh !important; /* Batasi tinggi surat agar ruang bawahnya lega */
+                height: 62vh !important; /* Batasi tinggi surat agar ruang bawahnya lega */
                 position: fixed !important; /* Mengunci posisi berdasarkan layar HP */
                 top: 0 !important;
                 left: 50% !important;
