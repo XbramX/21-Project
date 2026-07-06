@@ -46,7 +46,7 @@
             border-bottom: 8px solid currentColor;
         }
 
-        /* --- ANIMASI: KEMBANG API --- */
+        /* --- ANIMASI: KEMBANG API LEBIH BESAR & LAMA --- */
         .firework-particle {
             position: absolute;
             width: 6px;
@@ -69,7 +69,7 @@
             padding: 20px;
         }
 
-        /* --- STRUKTUR AMPLOP SUPER JUMBO (DESKTOP) --- */
+        /* --- STRUKTUR AMPLOP SUPER JUMBO --- */
         .envelope-wrapper {
             position: relative;
             width: 1000px;
@@ -128,7 +128,7 @@
             transition: all 0.4s ease;
         }
 
-        /* --- KERTAS SURAT JUMBO (DESKTOP) --- */
+        /* --- KERTAS SURAT JUMBO --- */
         .letter-paper {
             position: absolute;
             bottom: 60px;
@@ -193,7 +193,7 @@
             border-radius: 10px;
         }
 
-        /* --- KONDISI AMPLOP DIBUKA (DESKTOP) --- */
+        /* --- KONDISI AMPLOP DIBUKA --- */
         .container.open .envelope-flap {
             transform: rotateX(180deg);
             z-index: 1;
@@ -235,18 +235,20 @@
             transition: opacity 0.4s ease;
         }
 
+        /* Menghilangkan tulisan petunjuk saat surat terbuka */
         .container.open .instruction-hint {
             opacity: 0;
             pointer-events: none;
         }
 
-        /* --- KEYFRAMES ANIMASI --- */
+        /* --- KEYFRAMES ANIMASI LEDAKAN KEMBANG API --- */
         @keyframes fireworkExplode {
             0% { transform: translate(0, 0) scale(1.2); opacity: 1; }
             80% { opacity: 0.8; }
             100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; }
         }
 
+        /* --- KEYFRAMES BALON --- */
         @keyframes balloonFloat {
             0% { transform: translateY(800px) scale(0.5); opacity: 0; }
             10% { opacity: 0.8; }
@@ -254,91 +256,20 @@
             100% { transform: translateY(-150px) scale(1.2); opacity: 0; }
         }
 
-        /* ==========================================================================
-           --- OPTIMASI SUPER RESPONSIF HP & TABLET (BREAKPOINT < 768px) ---
-           ========================================================================== */
+        /* --- OPTIMASI RESPONSIF HP --- */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
+            .container { max-width: 100%; height: auto; }
+            .envelope-wrapper { width: 340px; height: 220px; border-radius: 0 0 12px 12px; }
+            .envelope-flap { border-left: 170px solid transparent; border-right: 170px solid transparent; border-top: 125px solid #cfc0ad; }
+            .envelope-pockets { width: 340px; height: 220px; border-radius: 0 0 12px 12px; }
+            .wax-seal { top: 95px; left: 147px; width: 45px; height: 45px; font-size: 0.95rem; }
             
-            .container { 
-                height: 100vh; 
-                padding: 10px;
-                justify-content: center;
-            }
-
-            .envelope-wrapper { 
-                width: 85vw; 
-                height: 55vw; 
-                border-radius: 0 0 12px 12px; 
-            }
-
-            .envelope-flap { 
-                border-left: 42.5vw solid transparent; 
-                border-right: 42.5vw solid transparent; 
-                border-top: 30vw solid #cfc0ad; 
-            }
-
-            .envelope-pockets { 
-                width: 85vw; 
-                height: 55vw; 
-                border-radius: 0 0 12px 12px; 
-            }
-
-            .wax-seal { 
-                top: calc(27.5vw - 25px); 
-                left: calc(42.5vw - 25px); 
-                width: 50px; 
-                height: 50px; 
-                font-size: 1.1rem; 
-            }
-            
-            /* Dorong amplop lebih jauh ke bawah saat terbuka agar tidak menutupi surat */
-            .container.open .envelope-wrapper { 
-                transform: translateY(45vh) scale(0.4); 
-                opacity: 0; /* Dibuat 0 agar bersih tidak mengganggu surat di belakangnya */
-                pointer-events: none;
-            }
-
-            /* Perbaikan posisi Kertas Surat di HP: Centered otomatis */
-            .container.open .letter-paper { 
-                width: 90vw; 
-                height: 75vh; /* Membatasi tinggi surat agar muat dalam layar HP */
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                bottom: auto;
-                transform: translate(-50%, -50%); /* Menjaga surat tepat di tengah layar */
-                z-index: 15;
-            }
-
-            .letter-scroll-box { 
-                padding: 30px 20px; 
-            }
-
-            .letter-title { 
-                font-size: 1.25rem; 
-                margin-bottom: 15px; 
-            }
-
-            .letter-text { 
-                font-size: 1.05rem; 
-                line-height: 1.9; 
-                text-align: left; 
-            }
-
-            .letter-footer { 
-                font-size: 0.95rem; 
-                margin-top: 20px; 
-            }
-            
-            .instruction-hint {
-                font-size: 0.8rem;
-                letter-spacing: 1px;
-                position: absolute;
-                bottom: 40px; /* Mengunci teks petunjuk di area bawah layar HP */
-            }
+            .container.open .envelope-wrapper { transform: translateY(300px) scale(0.7); }
+            .container.open .letter-paper { width: 95%; height: 580px; bottom: 50px; }
+            .letter-scroll-box { padding: 40px 25px; }
+            .letter-text { font-size: 1.05rem; line-height: 2; }
+            .letter-title { font-size: 1.3rem; margin-bottom: 20px; }
+            .letter-footer { font-size: 1rem; margin-top: 25px; }
         }
     </style>
 </head>
@@ -360,7 +291,7 @@
                 <h3 class="letter-title">Hai BOCILLL hehehe</h3>
                 <div class="letter-text">
                     Selamat Ulang tahun yang ke-21 Ya Cantik.<br><br>
-                    "Selamat ulang tahun yaaa. Semoga seluruh cita-cita dan doamu lekas tercapai, dan semua yang kamu mau bisa kamu dapatkan. Semangat terus kedepannya, sehat-sehat terus, dan tolong kurang-kurangi begadang sama overthinking-nya... pod-nya juga dikurangi ya.<br><br>
+                    "Selamat ulang tahun yaaa. Semoga seluruh cita-cita dan doamu lekas tercapai, dan semua yang kamu mau bisa kamu dapatkan. Semangat terus kedepannya, sehat-sehat terus, dan tolong kurang-kurangi begadang sama overthinking-nya... pod-nya juga dikurangi ya.
 
 Maaf ya kalau aku suka bikin kamu badmood atau suka ngasih larangan-larangan. Aku cuma nggak mau kamu kenapa-kenapa, karena jujur, kamu punya peran yang terlalu penting dalam hidupku. So please take care of yourself, and aku selalu di sini buat kamu, no matter what happens."
                     <span class="letter-footer">
@@ -396,6 +327,7 @@ Maaf ya kalau aku suka bikin kamu badmood atau suka ngasih larangan-larangan. Ak
                     });
                 }
 
+                // Jalankan pesta selebrasi berdurasi panjang
                 triggerCelebration();
             } else {
                 music.pause();
@@ -403,15 +335,17 @@ Maaf ya kalau aku suka bikin kamu badmood atau suka ngasih larangan-larangan. Ak
         }
 
         function triggerCelebration() {
+            // --- 1. ANIMASI: KEMBANG API YANG JAUH LEBIH BANYAK DAN LEBAT ---
             const colors = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#eccc68', '#ff6b81', '#70a1ff', '#ffffff', '#ff9f43', '#00d2d3'];
-            const totalExplosions = 50;
+            const totalExplosions = 50;// Dinaikkan menjadi 25 ledakan bersahutan tanpa henti
             
             for (let f = 0; f < totalExplosions; f++) {
+                // Jeda diatur agak rapat (f * 250ms) agar ledakannya bertubi-tubi ramai
                 setTimeout(() => {
                     const originX = window.innerWidth * (0.1 + Math.random() * 0.8);
                     const originY = window.innerHeight * (0.1 + Math.random() * 0.45);
                     
-                    for (let i = 0; i < 100; i++) { 
+                    for (let i = 0; i < 100; i++) { // Dinaikkan jadi 100 partikel per satu ledakan kembang api
                         const particle = document.createElement('div');
                         particle.classList.add('firework-particle');
                         
@@ -422,7 +356,7 @@ Maaf ya kalau aku suka bikin kamu badmood atau suka ngasih larangan-larangan. Ak
                         particle.style.top = `${originY}px`;
                         
                         const angle = Math.random() * Math.PI * 2;
-                        const velocity = Math.random() * 250 + 80; 
+                        const velocity = Math.random() * 250 + 80; // Dorongan ledakan dibuat lebih lebar menjangkau layar
                         const moveX = Math.cos(angle) * velocity;
                         const moveY = Math.sin(angle) * velocity;
                         
@@ -437,8 +371,9 @@ Maaf ya kalau aku suka bikin kamu badmood atau suka ngasih larangan-larangan. Ak
                 }, f * 250); 
             }
 
+            // --- 2. ANIMASI: BALON YANG JAUH LEBIH RAMAI ---
             const balloonColors = ['rgba(244,162,97,0.75)', 'rgba(231,111,81,0.75)', 'rgba(42,157,143,0.75)', 'rgba(233,196,106,0.75)', 'rgba(184,134,11,0.6)'];
-            const totalBalloons = 75; 
+            const totalBalloons = 75; // Dinaikkan menjadi 75 balon berhamburan terbang dari bawah
 
             for (let i = 0; i < totalBalloons; i++) {
                 const balloon = document.createElement('div');
@@ -448,13 +383,13 @@ Maaf ya kalau aku suka bikin kamu badmood atau suka ngasih larangan-larangan. Ak
                 balloon.style.color = randomColor;
                 balloon.style.backgroundColor = randomColor;
                 
-                balloon.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+                balloon.style.left = `${Math.random() * (window.innerWidth - 90)}px`;
                 
                 balloon.style.animation = `balloonFloat ${Math.random() * 2.0 + 4.5}s linear forwards`;
-                balloon.style.animationDelay = `${Math.random() * 2.5}s`; 
+                balloon.style.animationDelay = `${Math.random() * 2.5}s`; // Jeda sebaran balon merata sampai detik ke-5
                 
                 document.body.appendChild(balloon);
-                setTimeout(() => balloon.remove(), 9500);
+                setTimeout(() => balloon.remove(),9500);
             }
         }
     </script>

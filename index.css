@@ -1,0 +1,11 @@
+/* Perbaikan posisi Kertas Surat di HP agar lebih turun */
+.container.open .letter-paper { 
+    width: 90vw; 
+    height: 70vh; /* Sedikit dikurangi dari 75vh agar tidak terlalu tinggi */
+    position: absolute;
+    top: 55%; /* Diubah dari 50% ke 55% agar posisinya lebih turun ke bawah */
+    left: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%); 
+    z-index: 15;
+}
